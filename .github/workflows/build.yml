@@ -1,24 +1,31 @@
-name: Build PS2 RSOD ELF
+name: Build PS2 ELF
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: ps2dev/ps2dev:latest
-
+    container:
+      image: ps2dev/ps2dev:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install make
-        run: apk add --no-cache make
+      - name: Install UPX
+        run: |
+          apt-get update && apt-get install -y upx
 
       - name: Build ELF
-        run: make
+        run: |
+          make
 
-      - name: Upload ELF
+      - name: Compress with UPX
+        run: |
+          upx --best rsod.elf
+
+      - name: Upload ELF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: rsod-elf
-          path: rsod.elf
+          name: ps2-executable
+          path: |
+            rsod.elf
