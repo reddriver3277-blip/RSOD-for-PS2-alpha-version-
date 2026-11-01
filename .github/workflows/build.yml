@@ -13,7 +13,7 @@ jobs:
 
       - name: Install UPX
         run: |
-          apt-get update && apt-get install -y upx
+          apk update && apk add --no-cache upx
 
       - name: Build ELF
         run: |
