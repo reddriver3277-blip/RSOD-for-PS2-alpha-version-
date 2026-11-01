@@ -1,0 +1,21 @@
+name: Build PS2 RSOD ELF
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ps2dev/ps2dev:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build ELF
+        run: make
+
+      - name: Upload ELF
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsod-elf
+          path: rsod.elf
