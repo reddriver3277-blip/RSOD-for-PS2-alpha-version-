@@ -5,16 +5,15 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: ps2dev/ps2dev:latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup ps2dev
-        uses: ps2dev/ps2dev@v1
-
       - name: Install UPX
         run: |
-          sudo apt-get update && sudo apt-get install -y upx
+          apk update && apk add --no-cache upx make
 
       - name: Build ELF
         run: |
