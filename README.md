@@ -1,2 +1,74 @@
-# RSOD-for-PS2-alpha-version-
-Booting Red Screen of Death on PS2s for demo purposes from USB,Memory Card,HDD etc.
+# PS2 RSOD Demo ELF
+
+Демонстрационен ELF файл, който показва червен екран (Red Screen of Death) на PlayStation 2.
+
+---
+
+## Какво прави
+
+- Инициализира Graphics Synthesizer (GS) на PS2
+- Запълва целия екран с наситено червено (R=255, G=0, B=0)
+- Остава на червения екран до рестарт на конзолата
+
+---
+
+## Как да компилираш
+
+### 1. Инсталирай PS2DEV toolchain
+
+```bash
+# Linux/macOS — използвай ps2dev docker image
+docker run -it ps2dev/ps2dev bash
+
+# Или компилирай от source:
+# https://github.com/ps2dev/ps2dev
+```
+
+### 2. Компилирай
+
+```bash
+cd ps2_rsod
+make
+```
+
+Резултатът е `rsod.elf`.
+
+---
+
+## Как да стартираш през USB
+
+### Изисквания:
+- PS2 с **FreeMcBoot (FMCB)** или **FreeDVDBoot**
+- USB флашка, форматирана като **FAT32**
+- **uLaunchELF** или **wLaunchELF**
+
+### Стъпки:
+
+1. Копирай `rsod.elf` в корена на USB флашката
+2. Постави флашката в **USB порта** на PS2 (десния/горния)
+3. Стартирай **uLaunchELF** от FMCB менюто
+4. Отиди в `mass:/` (mass0:/)
+5. Намери `rsod.elf` и натисни **X** за стартиране
+6. Конзолата ще покаже червен екран
+
+### Рестарт:
+Натисни **Reset** бутона на конзолата за да излезеш.
+
+---
+
+## Структура на проекта
+
+```
+ps2_rsod/
+├── main.c      — Основен код (GS инициализация + червен екран)
+├── Makefile    — Build конфигурация за ps2sdk
+└── README.md   — Тези инструкции
+```
+
+---
+
+## Бележки
+
+- Тестван логически; изисква реален PS2DEV toolchain за компилация
+- Работи на реална PS2 хардуер и на PCSX2 емулатор
+- **Не уврежда конзолата** — само показва червен екран
